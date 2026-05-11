@@ -206,20 +206,68 @@ export default function App() {
       <main className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col px-4 py-6">
         <AnimatePresence mode="wait">
           {screen === "home" && (
-            <motion.section key="home" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} className="relative overflow-hidden flex min-h-[92vh] flex-col justify-between rounded-[2rem] border border-amber-300/25 bg-black/35 p-5 shadow-2xl backdrop-blur-sm before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top,rgba(180,0,0,0.25),transparent_55%)] before:pointer-events-none">
+            <motion.section
+              key="home"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, y: -18 }}
+              className="relative overflow-hidden flex min-h-[92vh] flex-col justify-between rounded-[2rem] border border-amber-300/25 bg-black/40 p-5 shadow-2xl backdrop-blur-sm"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(255,190,70,0.20),transparent_18%),radial-gradient(circle_at_50%_45%,rgba(170,0,0,0.45),transparent_42%)]" />
+              <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-red-900/30 blur-3xl" />
+              <div className="absolute -right-24 bottom-24 h-72 w-72 rounded-full bg-amber-600/10 blur-3xl" />
+              <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-transparent via-red-700/70 to-transparent" />
+
               <div className="relative text-center">
-                <div className="mb-3 flex items-center justify-center gap-2 text-xs tracking-[0.45em] text-red-300"><Star className="h-3 w-3"/> BOZKETA OFIZIALA <Star className="h-3 w-3"/></div>
-                <h1 className="text-5xl font-black uppercase leading-[0.85] tracking-tight text-[#f1c46d] drop-shadow-lg">Txitxis<br/><span className="text-red-700">&</span> Potti<br/><span className="text-4xl text-red-700">Awards</span><br/><span className="text-4xl">2026</span></h1>
-                <p className="mt-5 border-y border-red-800/70 py-3 text-xs font-bold tracking-[0.25em] text-[#f6d7a0]">SAIATZEN GARA GAUZAK ONGI EGITEN</p>
+                <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-black/45 px-4 py-2 text-[10px] font-black uppercase tracking-[0.35em] text-red-300">
+                  <Star className="h-3 w-3" /> Bozketa ofiziala <Star className="h-3 w-3" />
+                </div>
+
+                <div className="rounded-[1.75rem] border border-red-900/50 bg-black/30 p-4 shadow-2xl">
+                  <p className="mb-2 text-[10px] uppercase tracking-[0.55em] text-amber-100/55">Maiatzekoen festa</p>
+                  <h1 className="text-6xl font-black uppercase leading-[0.76] tracking-[-0.08em] text-[#f1c46d] drop-shadow-lg">
+                    Txitxis
+                    <br />
+                    <span className="text-red-700">&</span> Potti
+                    <br />
+                    <span className="text-4xl tracking-[-0.06em] text-red-700">Awards</span>
+                    <br />
+                    <span className="text-5xl">2026</span>
+                  </h1>
+                </div>
+
+                <p className="mt-5 border-y border-red-800/70 bg-black/25 py-3 text-[11px] font-black uppercase tracking-[0.22em] text-[#f6d7a0]">
+                  SAIATZEN GARA GAUZAK ONGI EGITEN
+                </p>
               </div>
-              <div className="relative my-8">
-                <div className="absolute inset-0 blur-3xl bg-red-700/20" />
+
+              <div className="relative my-7">
+                <div className="absolute inset-0 scale-125 rounded-full bg-red-700/25 blur-3xl" />
+                <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300/10" />
                 <BottleTrophy />
+                <p className="mt-3 text-center text-[10px] uppercase tracking-[0.45em] text-amber-100/40">The bottle wants to be a trophy</p>
               </div>
+
               <div className="relative space-y-4 text-center">
-                <p className="text-sm text-amber-100/80">Maiatzak 16 · Baga-Biga Faktorian · 17etatik aurrera</p>
-                <button onClick={() => setScreen("voter")} className="w-full rounded-2xl border border-red-900 bg-red-800 px-5 py-4 text-lg font-black uppercase tracking-widest text-amber-100 shadow-xl active:scale-[0.98]">Hasi bozkatzen</button>
-                <button onClick={openAdmin} className="text-xs uppercase tracking-[0.35em] text-amber-100/35 underline decoration-amber-100/20">Akademia</button>
+                <div className="rounded-2xl border border-amber-300/15 bg-black/35 p-3">
+                  <p className="text-sm font-bold text-amber-100/90">Maiatzak 16</p>
+                  <p className="text-sm text-amber-100/75">Baga-Biga Faktorian · 17etatik aurrera</p>
+                </div>
+
+                <button
+                  onClick={() => setScreen("voter")}
+                  className="w-full rounded-2xl border border-amber-300/30 bg-gradient-to-b from-red-700 to-red-950 px-5 py-4 text-lg font-black uppercase tracking-widest text-amber-100 shadow-xl shadow-red-950/50 active:scale-[0.98]"
+                >
+                  Hasi bozkatzen
+                </button>
+
+                <button
+                  onClick={openAdmin}
+                  className="text-[10px] uppercase tracking-[0.45em] text-amber-100/25 underline decoration-amber-100/10"
+                >
+                  Akademia
+                </button>
               </div>
             </motion.section>
           )}
