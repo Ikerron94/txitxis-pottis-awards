@@ -54,6 +54,28 @@ function CategoryIcon({ type }) {
   return <div className={base}><span className="text-5xl">↗</span></div>;
 }
 
+function calculateResults(allVotes) {
+  const results = {};
+
+  CATEGORIES.forEach((cat) => {
+    const points = {};
+
+    allVotes
+      .filter((row) => row.category_id === cat.id)
+      .forEach((row) => {
+        if (row.first_choice) points[row.first_choice] = (points[row.first_choice] || 0) + 3;
+        if (row.second_choice) points[row.second_choice] = (points[row.second_choice] || 0) + 2;
+        if (row.third_choice) points[row.third_choice] = (points[row.third_choice] || 0) + 1;
+      });
+
+    results[cat.id] = Object.entries(points)
+      .map(([name, total]) => ({ name, total }))
+      .sort((a, b) => b.total - a.total);
+  });
+
+  return results;
+}
+
 export default function App() {
   const [screen, setScreen] = useState("home");
   const [voter, setVoter] = useState("");
@@ -62,9 +84,13 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [adminVotes, setAdminVotes] = useState([]);
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminError, setAdminError] = useState("");
 
   const currentCategory = CATEGORIES[categoryIndex];
   const selected = votes[currentCategory?.id] || [];
+  const adminResults = useMemo(() => calculateResults(adminVotes), [adminVotes]);
 
   const filteredFriends = useMemo(() => {
     return FRIENDS.filter((name) => name !== voter && name.toLowerCase().includes(query.toLowerCase()));
@@ -90,6 +116,32 @@ export default function App() {
   const prevCategory = () => {
     setQuery("");
     if (categoryIndex > 0) setCategoryIndex(categoryIndex - 1);
+  };
+
+
+  const openAdmin = async () => {
+    setAdminError("");
+    setScreen("admin");
+
+    if (!supabase) {
+      setAdminError("Falta conectar Supabase.");
+      return;
+    }
+
+    setAdminLoading(true);
+    const { data, error } = await supabase
+      .from("votes")
+      .select("voter, category_id, first_choice, second_choice, third_choice, created_at")
+      .order("created_at", { ascending: false });
+
+    setAdminLoading(false);
+
+    if (error) {
+      setAdminError("No se han podido cargar los resultados.");
+      return;
+    }
+
+    setAdminVotes(data || []);
   };
 
   const saveVotes = async () => {
@@ -132,6 +184,7 @@ export default function App() {
               <div className="relative space-y-4 text-center">
                 <p className="text-sm text-amber-100/80">Maiatzak 16 · Baga-Biga Faktorian · 17etatik aurrera</p>
                 <button onClick={() => setScreen("voter")} className="w-full rounded-2xl border border-red-900 bg-red-800 px-5 py-4 text-lg font-black uppercase tracking-widest text-amber-100 shadow-xl active:scale-[0.98]">Hasi bozkatzen</button>
+                <button onClick={openAdmin} className="text-xs uppercase tracking-[0.35em] text-amber-100/35 underline decoration-amber-100/20">Akademia</button>
               </div>
             </motion.section>
           )}
@@ -156,7 +209,7 @@ export default function App() {
               </div>
               <div className="rounded-3xl border border-red-900/60 bg-red-950/30 p-4 text-center">
                 <div className="relative overflow-hidden rounded-3xl border border-amber-300/20">
-                  <img src={CATEGORY_IMAGES[currentCategory.id]} alt={currentCategory.es} className="h-52 w-full object-contain bg-black opacity-95 opacity-80" />
+                  <img src={CATEGORY_IMAGES[currentCategory.id]} alt={currentCategory.es} className="h-52 w-full object-cover opacity-80" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center"><CategoryIcon type={currentCategory.icon} /></div>
                 </div>
@@ -180,6 +233,71 @@ export default function App() {
                 <button onClick={prevCategory} disabled={categoryIndex === 0 || isSaving} className="rounded-2xl border border-amber-300/25 px-4 py-3 disabled:opacity-30"><ArrowLeft/></button>
                 <button onClick={nextCategory} disabled={selected.length === 0 || isSaving} className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-red-800 px-5 py-3 font-black uppercase tracking-widest disabled:opacity-40">{isSaving ? "Gordetzen..." : categoryIndex === CATEGORIES.length - 1 ? "Bidali botoak" : "Hurrengoa / Siguiente"} <ArrowRight className="h-5 w-5"/></button>
               </div>
+            </motion.section>
+          )}
+
+
+          {screen === "admin" && (
+            <motion.section key="admin" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} className="rounded-[2rem] border border-amber-300/25 bg-black/45 p-5 shadow-2xl">
+              <div className="mb-5 flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-red-300">Akademia</p>
+                  <h2 className="mt-1 text-4xl font-black uppercase leading-none tracking-tight">Recuento oficial</h2>
+                  <p className="mt-2 text-sm text-amber-100/70">Top 4 nominados por categoría. 1º = 3 puntos · 2º = 2 puntos · 3º = 1 punto.</p>
+                </div>
+                <button onClick={() => setScreen("home")} className="rounded-xl border border-amber-300/25 px-3 py-2 text-sm font-bold">Cerrar</button>
+              </div>
+
+              {adminLoading && <p className="rounded-2xl border border-amber-300/20 bg-black/35 p-4 text-amber-100/80">Kargatzen... Cargando resultados.</p>}
+              {adminError && <p className="rounded-2xl border border-red-400/40 bg-red-950/60 p-4 text-red-100">{adminError}</p>}
+
+              {!adminLoading && !adminError && (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-amber-300/20 bg-black/35 p-3 text-sm text-amber-100/80">
+                    Boto kopurua / votos registrados: <span className="font-black text-amber-300">{new Set(adminVotes.map((v) => v.voter)).size}</span>
+                  </div>
+
+                  {CATEGORIES.map((cat) => {
+                    const ranking = adminResults[cat.id] || [];
+                    return (
+                      <div key={cat.id} className="rounded-3xl border border-amber-300/20 bg-black/35 p-4">
+                        <h3 className="text-lg font-black uppercase leading-none text-[#f1c46d]">{cat.eu}</h3>
+                        <p className="mt-1 text-xs text-amber-100/60">{cat.es}</p>
+
+                        <div className="mt-4 space-y-2">
+                          {ranking.length === 0 && (
+                            <p className="text-sm text-amber-100/50">Oraindik botorik ez / Todavía sin votos.</p>
+                          )}
+
+                          {ranking.slice(0, 4).map((item, index) => (
+                            <div key={item.name} className={`flex items-center justify-between rounded-xl border px-3 py-3 ${index === 0 ? "border-amber-300 bg-amber-400 text-black" : "border-amber-300/15 bg-black/30 text-amber-100"}`}>
+                              <div className="flex items-center gap-3">
+                                <span className="w-7 text-center text-lg font-black">{index + 1}</span>
+                                <span className="font-black">{item.name}</span>
+                              </div>
+                              <span className="rounded-full bg-black/25 px-3 py-1 text-sm font-black">{item.total} puntu</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {ranking.length > 4 && (
+                          <details className="mt-3 text-sm text-amber-100/70">
+                            <summary className="cursor-pointer">Ikusi ranking osoa / Ver ranking completo</summary>
+                            <div className="mt-2 space-y-1">
+                              {ranking.slice(4).map((item, index) => (
+                                <div key={item.name} className="flex justify-between border-b border-amber-300/10 py-1">
+                                  <span>{index + 5}. {item.name}</span>
+                                  <span>{item.total}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </details>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </motion.section>
           )}
 
