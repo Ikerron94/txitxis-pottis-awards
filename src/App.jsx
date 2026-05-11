@@ -218,37 +218,21 @@ export default function App() {
                 alt="Txitxis & Potti Awards 2026"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/10" />
-              <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black via-black/85 to-transparent" />
 
-              <div className="relative z-10 space-y-4 p-5 text-center">
-                <div className="rounded-2xl border border-amber-300/20 bg-black/55 px-4 py-3 backdrop-blur-sm">
-                  <p className="text-[10px] font-black uppercase tracking-[0.35em] text-red-300">
-                    Bozketa ofiziala
-                  </p>
-                  <p className="mt-1 text-xs font-bold uppercase tracking-[0.22em] text-amber-100/80">
-                    SAIATZEN GARA GAUZAK ONGI EGITEN
-                  </p>
-                </div>
+              <button
+                onClick={() => setScreen("voter")}
+                className="absolute inset-x-[8%] bottom-[15%] z-20 h-24 opacity-0"
+                aria-label="Bozkatu orain"
+              >
+                Bozkatu orain
+              </button>
 
-                <button
-                  onClick={() => setScreen("voter")}
-                  className="w-full rounded-2xl border border-amber-300/40 bg-gradient-to-b from-red-600 to-red-950 px-5 py-5 text-xl font-black uppercase tracking-[0.22em] text-amber-100 shadow-2xl shadow-red-950/70 active:scale-[0.98]"
-                >
-                  Hasi bozkatzen
-                </button>
-
-                <p className="text-[10px] uppercase tracking-[0.35em] text-amber-100/45">
-                  Zure botoa, gure sari absurdoen etorkizuna
-                </p>
-
-                <button
-                  onClick={openAdmin}
-                  className="text-[10px] uppercase tracking-[0.45em] text-amber-100/25 underline decoration-amber-100/10"
-                >
-                  Akademia
-                </button>
-              </div>
+              <button
+                onClick={openAdmin}
+                className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 text-[10px] uppercase tracking-[0.45em] text-amber-100/30 underline decoration-amber-100/10"
+              >
+                Akademia
+              </button>
             </motion.section>
           )}
 
