@@ -156,7 +156,7 @@ export default function App() {
               </div>
               <div className="rounded-3xl border border-red-900/60 bg-red-950/30 p-4 text-center">
                 <div className="relative overflow-hidden rounded-3xl border border-amber-300/20">
-                  <img src={CATEGORY_IMAGES[currentCategory.id]} alt={currentCategory.es} className="h-52 w-full object-cover opacity-80" />
+                  <img src={CATEGORY_IMAGES[currentCategory.id]} alt={currentCategory.es} className="h-52 w-full object-contain bg-black opacity-95 opacity-80" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center"><CategoryIcon type={currentCategory.icon} /></div>
                 </div>
