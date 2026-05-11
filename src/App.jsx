@@ -87,6 +87,8 @@ export default function App() {
   const [adminVotes, setAdminVotes] = useState([]);
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminError, setAdminError] = useState("");
+  const [voterCheckLoading, setVoterCheckLoading] = useState(false);
+  const [voterAlreadyVoted, setVoterAlreadyVoted] = useState(false);
 
   const currentCategory = CATEGORIES[categoryIndex];
   const selected = votes[currentCategory?.id] || [];
@@ -118,6 +120,39 @@ export default function App() {
     if (categoryIndex > 0) setCategoryIndex(categoryIndex - 1);
   };
 
+
+
+  const checkVoterAndEnter = async () => {
+    setSaveError("");
+    setVoterAlreadyVoted(false);
+
+    if (!supabase) {
+      setScreen("vote");
+      return;
+    }
+
+    setVoterCheckLoading(true);
+
+    const { data, error } = await supabase
+      .from("votes")
+      .select("id")
+      .eq("voter", voter)
+      .limit(1);
+
+    setVoterCheckLoading(false);
+
+    if (error) {
+      setSaveError("No se ha podido comprobar si ya habías votado. Inténtalo otra vez.");
+      return;
+    }
+
+    if (data && data.length > 0) {
+      setVoterAlreadyVoted(true);
+      return;
+    }
+
+    setScreen("vote");
+  };
 
   const openAdmin = async () => {
     setAdminError("");
@@ -195,10 +230,21 @@ export default function App() {
               <p className="mt-2 text-sm text-amber-100/70">Aukeratu zure izena / Elige tu nombre. Akademiak dena kontrolpean dauka. Gutxi gorabehera.</p>
               <div className="mt-5 grid grid-cols-2 gap-2">
                 {FRIENDS.map((name) => (
-                  <button key={name} onClick={() => setVoter(name)} className={`rounded-xl border px-3 py-3 text-left font-bold ${voter === name ? "border-amber-300 bg-amber-400 text-black" : "border-amber-300/20 bg-black/35"}`}>{name}</button>
+                  <button key={name} onClick={() => { setVoter(name); setVoterAlreadyVoted(false); setSaveError(""); }} className={`rounded-xl border px-3 py-3 text-left font-bold ${voter === name ? "border-amber-300 bg-amber-400 text-black" : "border-amber-300/20 bg-black/35"}`}>{name}</button>
                 ))}
               </div>
-              <button disabled={!voter} onClick={() => setScreen("vote")} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-red-800 px-5 py-4 font-black uppercase tracking-widest disabled:opacity-40">Sartu galara / Entrar <ArrowRight className="h-5 w-5"/></button>
+              {voterAlreadyVoted && (
+                <div className="mt-5 rounded-2xl border border-amber-300/30 bg-black/45 p-4 text-sm text-amber-100">
+                  <p className="font-black uppercase text-red-300">Bozka eginda / Ya has votado</p>
+                  <p className="mt-1 text-amber-100/70">Akademiak zure botoak gordeta dauzka. Si hay que corregir algo, que lo gestione Iker desde Supabase.</p>
+                </div>
+              )}
+              {saveError && (
+                <p className="mt-5 rounded-2xl border border-red-400/40 bg-red-950/60 p-4 text-sm text-red-100">{saveError}</p>
+              )}
+              <button disabled={!voter || voterCheckLoading || voterAlreadyVoted} onClick={checkVoterAndEnter} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-red-800 px-5 py-4 font-black uppercase tracking-widest disabled:opacity-40">
+                {voterCheckLoading ? "Begiratzen..." : "Sartu galara / Entrar"} <ArrowRight className="h-5 w-5"/>
+              </button>
             </motion.section>
           )}
 
@@ -310,7 +356,7 @@ export default function App() {
                 <div className="mb-2 flex items-center gap-2 font-black text-amber-300"><Check className="h-4 w-4"/> Laburpena</div>
                 {CATEGORIES.map((cat) => <p key={cat.id} className="py-1"><span className="text-red-300">{cat.eu.slice(0, 22)}...</span> · {(votes[cat.id] || []).join(", ")}</p>)}
               </div>
-              <button onClick={() => {setScreen("home"); setCategoryIndex(0); setVotes({}); setVoter("");}} className="mt-6 rounded-2xl bg-red-800 px-5 py-4 font-black uppercase tracking-widest">Amaitu</button>
+              <button onClick={() => {setScreen("home"); setCategoryIndex(0); setVotes({}); setVoter(""); setVoterAlreadyVoted(false);}} className="mt-6 rounded-2xl bg-red-800 px-5 py-4 font-black uppercase tracking-widest">Amaitu</button>
             </motion.section>
           )}
         </AnimatePresence>
