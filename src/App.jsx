@@ -211,56 +211,36 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, y: -18 }}
-              className="relative overflow-hidden flex min-h-[92vh] flex-col justify-between rounded-[2rem] border border-amber-300/25 bg-black/40 p-5 shadow-2xl backdrop-blur-sm"
+              className="relative overflow-hidden flex min-h-[92vh] flex-col justify-end rounded-[2rem] border border-amber-300/25 bg-black shadow-2xl"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(255,190,70,0.20),transparent_18%),radial-gradient(circle_at_50%_45%,rgba(170,0,0,0.45),transparent_42%)]" />
-              <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-red-900/30 blur-3xl" />
-              <div className="absolute -right-24 bottom-24 h-72 w-72 rounded-full bg-amber-600/10 blur-3xl" />
-              <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-transparent via-red-700/70 to-transparent" />
+              <img
+                src="/images/poster.jpg"
+                alt="Txitxis & Potti Awards 2026"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/10" />
+              <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black via-black/85 to-transparent" />
 
-              <div className="relative text-center">
-                <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-black/45 px-4 py-2 text-[10px] font-black uppercase tracking-[0.35em] text-red-300">
-                  <Star className="h-3 w-3" /> Bozketa ofiziala <Star className="h-3 w-3" />
-                </div>
-
-                <div className="rounded-[1.75rem] border border-red-900/50 bg-black/30 p-4 shadow-2xl">
-                  <p className="mb-2 text-[10px] uppercase tracking-[0.55em] text-amber-100/55">Maiatzekoen festa</p>
-                  <h1 className="text-6xl font-black uppercase leading-[0.76] tracking-[-0.08em] text-[#f1c46d] drop-shadow-lg">
-                    Txitxis
-                    <br />
-                    <span className="text-red-700">&</span> Potti
-                    <br />
-                    <span className="text-4xl tracking-[-0.06em] text-red-700">Awards</span>
-                    <br />
-                    <span className="text-5xl">2026</span>
-                  </h1>
-                </div>
-
-                <p className="mt-5 border-y border-red-800/70 bg-black/25 py-3 text-[11px] font-black uppercase tracking-[0.22em] text-[#f6d7a0]">
-                  SAIATZEN GARA GAUZAK ONGI EGITEN
-                </p>
-              </div>
-
-              <div className="relative my-7">
-                <div className="absolute inset-0 scale-125 rounded-full bg-red-700/25 blur-3xl" />
-                <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300/10" />
-                <BottleTrophy />
-                <p className="mt-3 text-center text-[10px] uppercase tracking-[0.45em] text-amber-100/40">The bottle wants to be a trophy</p>
-              </div>
-
-              <div className="relative space-y-4 text-center">
-                <div className="rounded-2xl border border-amber-300/15 bg-black/35 p-3">
-                  <p className="text-sm font-bold text-amber-100/90">Maiatzak 16</p>
-                  <p className="text-sm text-amber-100/75">Baga-Biga Faktorian · 17etatik aurrera</p>
+              <div className="relative z-10 space-y-4 p-5 text-center">
+                <div className="rounded-2xl border border-amber-300/20 bg-black/55 px-4 py-3 backdrop-blur-sm">
+                  <p className="text-[10px] font-black uppercase tracking-[0.35em] text-red-300">
+                    Bozketa ofiziala
+                  </p>
+                  <p className="mt-1 text-xs font-bold uppercase tracking-[0.22em] text-amber-100/80">
+                    SAIATZEN GARA GAUZAK ONGI EGITEN
+                  </p>
                 </div>
 
                 <button
                   onClick={() => setScreen("voter")}
-                  className="w-full rounded-2xl border border-amber-300/30 bg-gradient-to-b from-red-700 to-red-950 px-5 py-4 text-lg font-black uppercase tracking-widest text-amber-100 shadow-xl shadow-red-950/50 active:scale-[0.98]"
+                  className="w-full rounded-2xl border border-amber-300/40 bg-gradient-to-b from-red-600 to-red-950 px-5 py-5 text-xl font-black uppercase tracking-[0.22em] text-amber-100 shadow-2xl shadow-red-950/70 active:scale-[0.98]"
                 >
                   Hasi bozkatzen
                 </button>
+
+                <p className="text-[10px] uppercase tracking-[0.35em] text-amber-100/45">
+                  Zure botoa, gure sari absurdoen etorkizuna
+                </p>
 
                 <button
                   onClick={openAdmin}
