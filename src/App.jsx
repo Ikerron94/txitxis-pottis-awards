@@ -220,19 +220,20 @@ export default function App() {
               />
 
               <button
-                onClick={() => setScreen("voter")}
-                className="absolute inset-x-[8%] bottom-[15%] z-20 h-24 opacity-0"
-                aria-label="Bozkatu orain"
-              >
-                Bozkatu orain
-              </button>
+  onClick={() => setScreen("voter")}
+  className="absolute inset-x-[8%] bottom-[15%] z-20 h-24 opacity-0"
+  aria-label="Bozkatu orain"
+>
+  Bozkatu orain
+</button>
 
-              <button
-                onClick={openAdmin}
-                className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 text-[10px] uppercase tracking-[0.45em] text-amber-100/30 underline decoration-amber-100/10"
-              >
-                Akademia
-              </button>
+<button
+  onClick={openAdmin}
+  className="absolute bottom-0 right-0 z-30 h-24 w-24 opacity-0"
+  aria-label="Admin"
+>
+  Admin
+</button>
             </motion.section>
           )}
 
