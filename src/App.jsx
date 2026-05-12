@@ -229,7 +229,7 @@ export default function App() {
 
 <button
   onClick={openAdmin}
-  className="absolute bottom-0 right-0 z-30 h-24 w-24 opacity-0"
+  className="absolute top-0 right-0 z-30 h-40 w-40 opacity-0"
   aria-label="Admin"
 >
   Admin
