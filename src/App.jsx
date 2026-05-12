@@ -219,7 +219,7 @@ export default function App() {
                 className="absolute inset-0 h-full w-full object-cover"
               />
 
-              <button
+           <button
   onClick={() => setScreen("voter")}
   className="absolute inset-x-[8%] bottom-[15%] z-20 h-24 opacity-0"
   aria-label="Bozkatu orain"
@@ -229,7 +229,7 @@ export default function App() {
 
 <button
   onClick={openAdmin}
-  className="absolute top-0 right-0 z-[999] h-56 w-56 opacity-0"
+  className="absolute top-3 right-3 z-[999] h-16 w-16 rounded-full bg-amber-300/10 text-[1px] text-transparent"
   aria-label="Admin"
 >
   Admin
