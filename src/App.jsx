@@ -229,10 +229,10 @@ export default function App() {
 
 <button
   onClick={openAdmin}
-  className="absolute top-4 right-4 z-[9999] h-8 w-8 rounded-full border border-amber-300/40 bg-red-900/60 shadow-lg shadow-black"
+  className="absolute top-4 right-4 z-[9999] h-16 w-16 rounded-full bg-red-600 text-white font-black"
   aria-label="Admin"
 >
-  <span className="sr-only">Admin</span>
+  A
 </button>
             </motion.section>
           )}
