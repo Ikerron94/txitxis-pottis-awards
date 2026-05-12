@@ -229,11 +229,10 @@ export default function App() {
 
 <button
   onClick={openAdmin}
-  className="absolute top-4 right-4 z-[9999] h-16 w-16 rounded-full bg-red-600 text-white font-black"
-style={{ right: "16px", top: "16px" }}
+  className="absolute top-4 right-4 z-[9999] h-10 w-10 rounded-full bg-black/20"
+  style={{ right: "16px", top: "16px" }}
   aria-label="Admin"
 >
-  A
 </button>
             </motion.section>
           )}
